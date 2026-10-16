@@ -1,0 +1,15 @@
+pre-commit:
+  commands:
+    format:
+      glob: "*.{js,ts,jsx,tsx}"
+      run: npx oxfmt {staged_files}
+      stage_fixed: true
+    lint:
+      glob: "*.{js,ts,jsx,tsx}"
+      run: npm run lint:fix {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    lint-commit-msg:
+      run: npx commitlint --edit {1}
