@@ -1,3 +1,4 @@
+import { describe, test, expect } from "@jest/globals";
 import Ship from "./ship.js";
 
 describe("hit functionality works", () => {
