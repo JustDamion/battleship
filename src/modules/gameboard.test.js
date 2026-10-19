@@ -152,6 +152,22 @@ describe("receiveAttack", () => {
       board.receiveAttack([0, 1]);
       expect(() => board.receiveAttack([0, 1])).toThrow("");
     });
+
+    it("throws when attack row is negative", () => {
+      expect(() => board.receiveAttack([-1, 0])).toThrow("");
+    });
+
+    it("throws when attack row is larger than max board size", () => {
+      expect(() => board.receiveAttack([10, 0])).toThrow("");
+    });
+
+    it("throws when attack col is negative", () => {
+      expect(() => board.receiveAttack([0, -1])).toThrow("");
+    });
+
+    it("throws when attack col is larger than max board size", () => {
+      expect(() => board.receiveAttack([0, 10])).toThrow("");
+    });
   });
 });
 
@@ -162,6 +178,14 @@ describe("isAllSunk", () => {
 
   it("should be false when not all ships are sunk", () => {
     board.placeShip(smallShip, [0, 0], [0, 1]);
+    expect(board.isAllSunk()).toBe(false);
+  });
+
+  it("should be false when only one of two ships are sunk", () => {
+    board.placeShip(smallShip, [0, 0], [0, 1]);
+    board.placeShip(mediumShip, [4, 4], [6, 4]);
+    board.receiveAttack([0, 0]);
+    board.receiveAttack([0, 1]);
     expect(board.isAllSunk()).toBe(false);
   });
 
