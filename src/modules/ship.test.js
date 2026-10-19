@@ -1,24 +1,24 @@
-import { describe, test, expect } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 import Ship from "./ship.js";
 
-describe("hit functionality works", () => {
+describe("hit and sink", () => {
   const ship = new Ship(3);
 
-  test("hit function increases number of hits on ship", () => {
+  it("should increase number of hits to 1", () => {
     ship.hit();
     expect(ship.hits).toBe(1);
   });
 
-  test("hit function increases number of hits on ship", () => {
+  it("should increase number of hits to 2", () => {
     ship.hit();
     expect(ship.hits).toBe(2);
   });
 
-  test("ship is not sunk if hits are not equal to length", () => {
+  it("should check that the ship is not sunk", () => {
     expect(ship.isSunk()).toBe(false);
   });
 
-  test("ship sinks if hits is equal to length", () => {
+  it("should hit ship and check that ship is sunk", () => {
     ship.hit();
     expect(ship.isSunk()).toBe(true);
   });
