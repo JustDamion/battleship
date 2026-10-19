@@ -35,6 +35,7 @@
     "default-case-last": "error",
     "eqeqeq": "error",
     "new-cap": "error",
+    "sort-imports": "error",
     "yoda": ["error", "never"],
     "array-callback-return": "error",
     "no-array-constructor": "error",
