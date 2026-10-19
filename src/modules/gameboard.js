@@ -48,6 +48,7 @@ export default class GameBoard {
   }
 
   isShip(arr) {
+    if (!this.isInBounds(arr)) throw new Error();
     return this.board[arr[0]][arr[1]] !== null;
   }
 
