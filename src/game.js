@@ -1,24 +1,28 @@
+import { renderPlayerOneBoard, renderPlayerTwoBoard } from "./modules/render.js";
 import Player from "./modules/player.js";
 import Ship from "./modules/ship.js";
-import { renderBoard } from "./modules/render.js";
 
 export default class Game {
   playerOne = new Player();
   playerTwo = new Player();
-  currentPlayer = this.playerOne;
+  activePlayer = this.playerOne;
   inactivePlayer = this.playerTwo;
 
   switchPlayer() {
-    this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne;
-
+    this.activePlayer = this.activePlayer === this.playerOne ? this.playerTwo : this.playerOne;
     this.inactivePlayer = this.inactivePlayer === this.playerOne ? this.playerTwo : this.playerOne;
   }
 
   start() {
     this.playerTwo.gameboard.placeShip(new Ship(2), [1, 0], [1, 1]);
-    renderBoard(this.inactivePlayer.gameboard);
+    this.playerOne.gameboard.placeShip(new Ship(3), [5, 5], [3, 5]);
+    renderPlayerTwoBoard(this.activePlayer.gameboard);
+    renderPlayerOneBoard(this.inactivePlayer.gameboard);
 
-    const board = document.getElementById("board");
+    const board =
+      this.activePlayer === this.playerOne
+        ? document.getElementById("player-one-board")
+        : document.getElementById("player-two-board");
 
     board.addEventListener("click", (event) => {
       const row = Number(event.target.dataset.row);
@@ -26,8 +30,17 @@ export default class Game {
 
       if (row && column) {
         this.inactivePlayer.gameboard.receiveAttack([row, column]);
+
+        if (this.inactivePlayer.gameboard.isAllSunk()) {
+          alert("game over");
+        }
+
         this.switchPlayer();
-        renderBoard(this.inactivePlayer.gameboard);
+        if (this.activePlayer === this.playerOne) {
+          renderPlayerTwoBoard(this.inactivePlayer.gameboard);
+        } else {
+          renderPlayerTwoBoard(this.inactivePlayer.gameboard);
+        }
       }
     });
   }

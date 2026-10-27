@@ -1,6 +1,4 @@
-function renderBoard(gameboard) {
-  const container = document.getElementById("board");
-  container.textContent = "";
+function renderBoard(gameboard, container) {
   gameboard.board.forEach((row, rowIndex) => {
     row.forEach((cell, columnIndex) => {
       const square = document.createElement("button");
@@ -30,4 +28,16 @@ function renderBoard(gameboard) {
   });
 }
 
-export { renderBoard };
+function renderPlayerOneBoard(gameboard) {
+  const container = document.getElementById("player-one-board");
+  container.textContent = "";
+  renderBoard(gameboard, container);
+}
+
+function renderPlayerTwoBoard(gameboard) {
+  const container = document.getElementById("player-two-board");
+  container.textContent = "";
+  renderBoard(gameboard, container);
+}
+
+export { renderPlayerOneBoard, renderPlayerTwoBoard };
