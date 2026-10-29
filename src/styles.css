@@ -66,6 +66,16 @@ h6 {
 
 /* END CSS RESET */
 
+body {
+  height: 100vh;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  background-color: rgb(100, 100, 100);
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -74,8 +84,9 @@ h6 {
 
 .board__square {
   background-color: rgb(0, 97, 133);
-  padding: 20px;
   border: 1px solid black;
+  height: 60px;
+  width: 60px;
 }
 
 .board__square--miss {

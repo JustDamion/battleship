@@ -14,10 +14,10 @@ export default class Game {
   }
 
   start() {
-    this.playerTwo.gameboard.placeShip(new Ship(2), [1, 0], [1, 1]);
     this.playerOne.gameboard.placeShip(new Ship(3), [5, 5], [3, 5]);
-    renderPlayerTwoBoard(this.activePlayer.gameboard);
-    renderPlayerOneBoard(this.inactivePlayer.gameboard);
+    this.playerTwo.gameboard.placeShip(new Ship(2), [1, 0], [1, 1]);
+    renderPlayerOneBoard(this.playerOne.gameboard);
+    renderPlayerTwoBoard(this.playerTwo.gameboard);
 
     const board =
       this.activePlayer === this.playerOne
@@ -36,11 +36,8 @@ export default class Game {
         }
 
         this.switchPlayer();
-        if (this.activePlayer === this.playerOne) {
-          renderPlayerTwoBoard(this.inactivePlayer.gameboard);
-        } else {
-          renderPlayerTwoBoard(this.inactivePlayer.gameboard);
-        }
+        renderPlayerOneBoard(this.playerOne.gameboard);
+        renderPlayerTwoBoard(this.playerTwo.gameboard);
       }
     });
   }
