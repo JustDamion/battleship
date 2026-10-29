@@ -19,26 +19,34 @@ export default class Game {
     renderPlayerOneBoard(this.playerOne.gameboard);
     renderPlayerTwoBoard(this.playerTwo.gameboard);
 
-    const board =
-      this.activePlayer === this.playerOne
-        ? document.getElementById("player-one-board")
-        : document.getElementById("player-two-board");
+    const playerOneBoardElement = document.getElementById("player-one-board");
+    const playerTwoBoardElement = document.getElementById("player-two-board");
 
-    board.addEventListener("click", (event) => {
-      const row = Number(event.target.dataset.row);
-      const column = Number(event.target.dataset.column);
-
-      if (row && column) {
-        this.inactivePlayer.gameboard.receiveAttack([row, column]);
-
-        if (this.inactivePlayer.gameboard.isAllSunk()) {
-          alert("game over");
-        }
-
-        this.switchPlayer();
-        renderPlayerOneBoard(this.playerOne.gameboard);
-        renderPlayerTwoBoard(this.playerTwo.gameboard);
-      }
+    playerOneBoardElement.addEventListener("click", (event) => {
+      if (this.activePlayer !== this.playerOne) return;
+      this.attack(event);
     });
+
+    playerTwoBoardElement.addEventListener("click", (event) => {
+      if (this.activePlayer !== this.playerTwo) return;
+      this.attack(event);
+    });
+  }
+
+  attack(event) {
+    const row = Number(event.target.dataset.row);
+    const column = Number(event.target.dataset.column);
+
+    if (row && column) {
+      this.inactivePlayer.gameboard.receiveAttack([row, column]);
+
+      if (this.inactivePlayer.gameboard.isAllSunk()) {
+        alert("game over");
+      }
+
+      this.switchPlayer();
+      renderPlayerOneBoard(this.playerOne.gameboard);
+      renderPlayerTwoBoard(this.playerTwo.gameboard);
+    }
   }
 }
