@@ -13,12 +13,12 @@ export default class Game {
     const playerTwoBoardElement = document.getElementById("player-two-board");
 
     playerOneBoardElement.addEventListener("click", (event) => {
-      if (this.activePlayer !== this.playerOne) return;
+      if (this.activePlayer !== this.playerTwo) return;
       this.handleCellClick(event);
     });
 
     playerTwoBoardElement.addEventListener("click", (event) => {
-      if (this.activePlayer !== this.playerTwo) return;
+      if (this.activePlayer !== this.playerOne) return;
       this.handleCellClick(event);
     });
   }
