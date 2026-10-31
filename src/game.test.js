@@ -9,7 +9,7 @@ beforeEach(() => {
 
 describe("Game", () => {
   it("starts with player one's turn", () => {
-    expect(game.currentPlayer).toBe(game.playerOne);
+    expect(game.activePlayer).toBe(game.playerOne);
   });
 
   it("starts with player two as inactive", () => {
@@ -19,7 +19,7 @@ describe("Game", () => {
   describe("switchPlayer", () => {
     it("switches current player to player two", () => {
       game.switchPlayer();
-      expect(game.currentPlayer).toBe(game.playerTwo);
+      expect(game.activePlayer).toBe(game.playerTwo);
     });
 
     it("switches inactive player to player one", () => {
