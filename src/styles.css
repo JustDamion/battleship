@@ -89,10 +89,23 @@ body {
   width: 60px;
 }
 
+.board__square:hover {
+  background-color: rgb(0, 100, 150);
+  cursor: crosshair;
+}
+
 .board__square--miss {
-  background-color: rgb(174, 174, 174);
+  background-color: rgb(175, 175, 175);
+}
+
+.board__square--miss:hover {
+  background-color: rgb(175, 175, 175);
 }
 
 .board__square--hit {
+  background-color: red;
+}
+
+.board__square--hit:hover {
   background-color: red;
 }
