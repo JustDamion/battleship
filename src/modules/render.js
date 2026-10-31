@@ -1,4 +1,4 @@
-function renderBoard(gameboard, container) {
+function renderBoard(gameboard, container, hideShips = false) {
   gameboard.board.forEach((row, rowIndex) => {
     row.forEach((cell, columnIndex) => {
       const square = document.createElement("button");
@@ -22,7 +22,10 @@ function renderBoard(gameboard, container) {
         square.classList.add("board__square--hit");
       }
 
-      square.textContent = cell;
+      if (!hideShips) {
+        square.textContent = cell;
+      }
+
       container.appendChild(square);
     });
   });
@@ -37,7 +40,7 @@ function renderPlayerOneBoard(gameboard) {
 function renderPlayerTwoBoard(gameboard) {
   const container = document.getElementById("player-two-board");
   container.textContent = "";
-  renderBoard(gameboard, container);
+  renderBoard(gameboard, container, true);
 }
 
 export { renderPlayerOneBoard, renderPlayerTwoBoard };
