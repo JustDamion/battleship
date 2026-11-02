@@ -13,7 +13,27 @@ export default class Game {
     const column = Number(event.target.dataset.column);
 
     if (row >= 0 && column >= 0) {
-      this.attack(row, column);
+      if (this.inactivePlayer.gameboard.isSquareAlreadyAttacked([row, column])) return;
+      this.inactivePlayer.gameboard.receiveAttack([row, column]);
+
+      if (this.inactivePlayer.gameboard.isAllSunk()) {
+        alert("game over");
+      }
+
+      this.switchPlayer();
+
+      let randomRow = Math.floor(Math.random() * 10);
+      let randomCol = Math.floor(Math.random() * 10);
+
+      while (this.inactivePlayer.gameboard.isSquareAlreadyAttacked([randomRow, randomCol])) {
+        randomRow = Math.floor(Math.random() * 10);
+        randomCol = Math.floor(Math.random() * 10);
+      }
+
+      this.inactivePlayer.gameboard.receiveAttack([randomRow, randomCol]);
+
+      this.switchPlayer();
+
       renderPlayerOneBoard(this.playerOne.gameboard);
       renderPlayerTwoBoard(this.playerTwo.gameboard);
     }
@@ -42,15 +62,5 @@ export default class Game {
       if (this.activePlayer !== this.playerOne) return;
       this.handleCellClick(event);
     });
-  }
-
-  attack(row, column) {
-    this.inactivePlayer.gameboard.receiveAttack([row, column]);
-
-    if (this.inactivePlayer.gameboard.isAllSunk()) {
-      alert("game over");
-    }
-
-    this.switchPlayer();
   }
 }

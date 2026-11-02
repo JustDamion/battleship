@@ -26,6 +26,11 @@ export default class GameBoard {
     }
   }
 
+  isSquareAlreadyAttacked(arr) {
+    const isSameSquare = ([row, col]) => row === arr[0] && col === arr[1];
+    return this.missedAttacks.some(isSameSquare) || this.hitAttacks.some(isSameSquare);
+  }
+
   placeShip(ship, start, end) {
     const [startRow, startCol] = start;
     const [endRow, endCol] = end;
@@ -53,13 +58,7 @@ export default class GameBoard {
   }
 
   receiveAttack(arr) {
-    const isSameSquare = ([row, col]) => row === arr[0] && col === arr[1];
-
-    if (
-      this.missedAttacks.some(isSameSquare) ||
-      this.hitAttacks.some(isSameSquare) ||
-      !this.isInBounds(arr)
-    ) {
+    if (this.isSquareAlreadyAttacked(arr) || !this.isInBounds(arr)) {
       throw new Error();
     }
 
