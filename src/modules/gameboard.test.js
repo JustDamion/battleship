@@ -13,43 +13,45 @@ beforeEach(() => {
 });
 
 describe("placeShip", () => {
-  it("places a ship vertically pointing up", () => {
-    board.placeShip(smallShip, [2, 1], "up");
+  describe("valid placements", () => {
+    it("places a ship vertically pointing up", () => {
+      board.placeShip(smallShip, [2, 1], "up");
 
-    expect(board.isShip([2, 1])).toBe(true);
-    expect(board.isShip([1, 1])).toBe(true);
-    expect(board.isShip([0, 1])).toBe(false);
+      expect(board.isShip([2, 1])).toBe(true);
+      expect(board.isShip([1, 1])).toBe(true);
+      expect(board.isShip([0, 1])).toBe(false);
+    });
+
+    it("places a ship vertically pointing down", () => {
+      board.placeShip(mediumShip, [3, 1], "down");
+
+      expect(board.isShip([2, 1])).toBe(false);
+      expect(board.isShip([3, 1])).toBe(true);
+      expect(board.isShip([4, 1])).toBe(true);
+      expect(board.isShip([5, 1])).toBe(true);
+      expect(board.isShip([6, 1])).toBe(false);
+    });
+
+    it("places a ship horizontally pointing right", () => {
+      board.placeShip(smallShip, [0, 0], "right");
+
+      expect(board.isShip([0, 0])).toBe(true);
+      expect(board.isShip([0, 1])).toBe(true);
+      expect(board.isShip([0, 2])).toBe(false);
+    });
+
+    it("places a ship horizontally pointing left", () => {
+      board.placeShip(mediumShip, [5, 3], "left");
+
+      expect(board.isShip([5, 0])).toBe(false);
+      expect(board.isShip([5, 1])).toBe(true);
+      expect(board.isShip([5, 2])).toBe(true);
+      expect(board.isShip([5, 3])).toBe(true);
+      expect(board.isShip([5, 4])).toBe(false);
+    });
   });
 
-  it("places a ship vertically pointing down", () => {
-    board.placeShip(mediumShip, [3, 1], "down");
-
-    expect(board.isShip([2, 1])).toBe(false);
-    expect(board.isShip([3, 1])).toBe(true);
-    expect(board.isShip([4, 1])).toBe(true);
-    expect(board.isShip([5, 1])).toBe(true);
-    expect(board.isShip([6, 1])).toBe(false);
-  });
-
-  it("places a ship horizontally pointing right", () => {
-    board.placeShip(smallShip, [0, 0], "right");
-
-    expect(board.isShip([0, 0])).toBe(true);
-    expect(board.isShip([0, 1])).toBe(true);
-    expect(board.isShip([0, 2])).toBe(false);
-  });
-
-  it("places a ship horizontally pointing left", () => {
-    board.placeShip(mediumShip, [5, 3], "left");
-
-    expect(board.isShip([5, 0])).toBe(false);
-    expect(board.isShip([5, 1])).toBe(true);
-    expect(board.isShip([5, 2])).toBe(true);
-    expect(board.isShip([5, 3])).toBe(true);
-    expect(board.isShip([5, 4])).toBe(false);
-  });
-
-  describe("rejects invalid placement", () => {
+  describe("invalid placements", () => {
     it("throws when the ship overlaps another ship", () => {
       board.placeShip(mediumShip, [0, 2], "down");
       expect(() => board.placeShip(mediumShip, [1, 1], "right")).toThrow("");
@@ -79,36 +81,40 @@ describe("placeShip", () => {
 });
 
 describe("receiveAttack", () => {
-  it("records miss when the square is empty", () => {
-    board.receiveAttack([3, 4]);
-    expect(board.missedAttacks).toContainEqual([3, 4]);
+  describe("successful attacks", () => {
+    it("records hit when hitting a ship", () => {
+      board.placeShip(smallShip, [0, 0], "right");
+      board.receiveAttack([0, 1]);
+      expect(board.hitAttacks).toContainEqual("0,1");
+    });
+
+    it("increases the ship's hit count when it hits", () => {
+      board.placeShip(smallShip, [0, 0], "right");
+      board.receiveAttack([0, 1]);
+      expect(smallShip.hits).toBe(1);
+    });
+
+    it("does not record a miss when the attack hits a ship", () => {
+      board.placeShip(smallShip, [0, 0], "right");
+      board.receiveAttack([0, 1]);
+      expect(board.missedAttacks).not.toContainEqual("0,1");
+    });
   });
 
-  it("does not record a miss when the attack hits a ship", () => {
-    board.placeShip(smallShip, [0, 0], "right");
-    board.receiveAttack([0, 1]);
-    expect(board.missedAttacks).not.toContainEqual([0, 1]);
+  describe("missed attacks", () => {
+    it("records miss when the square is empty", () => {
+      board.receiveAttack([3, 4]);
+      expect(board.missedAttacks).toContainEqual("3,4");
+    });
+
+    it("does not record a hit when the attack misses", () => {
+      board.placeShip(smallShip, [0, 0], "right");
+      board.receiveAttack([0, 2]);
+      expect(board.hitAttacks).not.toContainEqual("0,2");
+    });
   });
 
-  it("records hit when hitting a ship", () => {
-    board.placeShip(smallShip, [0, 0], "right");
-    board.receiveAttack([0, 1]);
-    expect(board.hitAttacks).toContainEqual([0, 1]);
-  });
-
-  it("does not record a hit when the attack misses", () => {
-    board.placeShip(smallShip, [0, 0], "right");
-    board.receiveAttack([0, 2]);
-    expect(board.hitAttacks).not.toContainEqual([0, 2]);
-  });
-
-  it("increases the ship's hit count when it hits", () => {
-    board.placeShip(smallShip, [0, 0], "right");
-    board.receiveAttack([0, 1]);
-    expect(smallShip.hits).toBe(1);
-  });
-
-  describe("rejects invalid attack", () => {
+  describe("invalid attacks", () => {
     it("throws when the square was already attacked and missed", () => {
       board.receiveAttack([0, 1]);
       expect(() => board.receiveAttack([0, 1])).toThrow("");
