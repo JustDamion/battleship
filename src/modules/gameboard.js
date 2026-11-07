@@ -2,16 +2,20 @@ const BOARD_SIZE = 10;
 
 export default class GameBoard {
   board = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(null));
-  missedAttacks = [];
-  hitAttacks = [];
+  missedAttacks = new Set();
+  hitAttacks = new Set();
 
-  isInBounds(arr) {
-    return arr[0] >= 0 && arr[0] < BOARD_SIZE && arr[1] >= 0 && arr[1] < BOARD_SIZE;
+  isInBounds([row, col]) {
+    return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
   }
 
-  isSquareAlreadyAttacked(arr) {
-    const isSameSquare = ([row, col]) => row === arr[0] && col === arr[1];
-    return this.missedAttacks.some(isSameSquare) || this.hitAttacks.some(isSameSquare);
+  isSquareAlreadyAttacked([row, col]) {
+    return this.missedAttacks.has(`${row},${col}`) || this.hitAttacks.has(`${row},${col}`);
+  }
+
+  isShip([row, col]) {
+    if (!this.isInBounds([row, col])) throw new RangeError();
+    return this.board[row][col] !== null;
   }
 
   placeShip(ship, [row, col], direction) {
@@ -37,21 +41,16 @@ export default class GameBoard {
     }
   }
 
-  isShip(arr) {
-    if (!this.isInBounds(arr)) throw new Error();
-    return this.board[arr[0]][arr[1]] !== null;
-  }
-
-  receiveAttack(arr) {
-    if (this.isSquareAlreadyAttacked(arr) || !this.isInBounds(arr)) {
+  receiveAttack([row, col]) {
+    if (this.isSquareAlreadyAttacked([row, col]) || !this.isInBounds([row, col])) {
       throw new Error();
     }
 
-    if (this.isShip(arr)) {
-      this.board[arr[0]][arr[1]].hit();
-      this.hitAttacks.push(arr);
+    if (this.isShip([row, col])) {
+      this.board[row][col].hit();
+      this.hitAttacks.add(`${row},${col}`);
     } else {
-      this.missedAttacks.push(arr);
+      this.missedAttacks.add(`${row},${col}`);
     }
   }
 
