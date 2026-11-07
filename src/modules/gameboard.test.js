@@ -13,16 +13,16 @@ beforeEach(() => {
 });
 
 describe("placeShip", () => {
-  it("places a ship vertically between start and end", () => {
-    board.placeShip(smallShip, [0, 1], [1, 1]);
+  it("places a ship vertically pointing up", () => {
+    board.placeShip(smallShip, [2, 1], "up");
 
-    expect(board.isShip([0, 1])).toBe(true);
+    expect(board.isShip([2, 1])).toBe(true);
     expect(board.isShip([1, 1])).toBe(true);
-    expect(board.isShip([2, 1])).toBe(false);
+    expect(board.isShip([0, 1])).toBe(false);
   });
 
-  it("places a ship vertically when end is before start", () => {
-    board.placeShip(mediumShip, [5, 1], [3, 1]);
+  it("places a ship vertically pointing down", () => {
+    board.placeShip(mediumShip, [3, 1], "down");
 
     expect(board.isShip([2, 1])).toBe(false);
     expect(board.isShip([3, 1])).toBe(true);
@@ -31,16 +31,16 @@ describe("placeShip", () => {
     expect(board.isShip([6, 1])).toBe(false);
   });
 
-  it("places a ship horizontally between start and end", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
+  it("places a ship horizontally pointing right", () => {
+    board.placeShip(smallShip, [0, 0], "right");
 
     expect(board.isShip([0, 0])).toBe(true);
     expect(board.isShip([0, 1])).toBe(true);
     expect(board.isShip([0, 2])).toBe(false);
   });
 
-  it("places a ship horizontally when end is before start", () => {
-    board.placeShip(mediumShip, [5, 3], [5, 1]);
+  it("places a ship horizontally pointing left", () => {
+    board.placeShip(mediumShip, [5, 3], "left");
 
     expect(board.isShip([5, 0])).toBe(false);
     expect(board.isShip([5, 1])).toBe(true);
@@ -51,61 +51,28 @@ describe("placeShip", () => {
 
   describe("rejects invalid placement", () => {
     it("throws when the ship overlaps another ship", () => {
-      board.placeShip(smallShip, [4, 4], [4, 5]);
-      expect(() => board.placeShip(mediumShip, [3, 4], [5, 4])).toThrow("");
-      expect(board.isShip([3, 4])).toBe(false);
-    });
-
-    it("throws when the ship is shorter than the span", () => {
-      expect(() => board.placeShip(smallShip, [0, 0], [0, 5])).toThrow("");
-    });
-
-    it("throws when the ship is longer than the span", () => {
-      expect(() => board.placeShip(mediumShip, [0, 0], [0, 1])).toThrow("");
-    });
-
-    it("throws when placement is diagonal", () => {
-      expect(() => board.placeShip(mediumShip, [0, 0], [2, 2])).toThrow("");
-      expect(board.isShip([0, 0])).toBe(false);
+      board.placeShip(mediumShip, [0, 2], "down");
+      expect(() => board.placeShip(mediumShip, [1, 1], "right")).toThrow("");
+      expect(board.isShip([1, 1])).toBe(false);
     });
 
     it("throws when the start row is larger than max board size", () => {
-      expect(() => board.placeShip(mediumShip, [10, 0], [9, 0])).toThrow("");
+      expect(() => board.placeShip(mediumShip, [10, 0], "right")).toThrow("");
       expect(board.isShip([9, 0])).toBe(false);
     });
 
     it("throws when the start row is negative", () => {
-      expect(() => board.placeShip(mediumShip, [-1, 0], [1, 0])).toThrow("");
+      expect(() => board.placeShip(mediumShip, [-1, 0], "left")).toThrow("");
       expect(board.isShip([1, 0])).toBe(false);
     });
 
     it("throws when the start col is larger than max board size", () => {
-      expect(() => board.placeShip(mediumShip, [0, 10], [0, 9])).toThrow("");
+      expect(() => board.placeShip(mediumShip, [0, 10], "up")).toThrow("");
       expect(board.isShip([0, 9])).toBe(false);
     });
 
     it("throws when the start col is negative", () => {
-      expect(() => board.placeShip(mediumShip, [0, -1], [0, 1])).toThrow("");
-      expect(board.isShip([0, 1])).toBe(false);
-    });
-
-    it("throws when the end row is larger than max board size", () => {
-      expect(() => board.placeShip(mediumShip, [9, 0], [10, 0])).toThrow("");
-      expect(board.isShip([9, 0])).toBe(false);
-    });
-
-    it("throws when the end row is negative", () => {
-      expect(() => board.placeShip(mediumShip, [1, 0], [-1, 0])).toThrow("");
-      expect(board.isShip([1, 0])).toBe(false);
-    });
-
-    it("throws when the end col is larger than max board size", () => {
-      expect(() => board.placeShip(mediumShip, [0, 9], [0, 10])).toThrow("");
-      expect(board.isShip([0, 9])).toBe(false);
-    });
-
-    it("throws when the end col is negative", () => {
-      expect(() => board.placeShip(mediumShip, [0, 1], [0, -1])).toThrow("");
+      expect(() => board.placeShip(mediumShip, [0, -1], "down")).toThrow("");
       expect(board.isShip([0, 1])).toBe(false);
     });
   });
@@ -118,25 +85,25 @@ describe("receiveAttack", () => {
   });
 
   it("does not record a miss when the attack hits a ship", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
+    board.placeShip(smallShip, [0, 0], "right");
     board.receiveAttack([0, 1]);
     expect(board.missedAttacks).not.toContainEqual([0, 1]);
   });
 
   it("records hit when hitting a ship", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
+    board.placeShip(smallShip, [0, 0], "right");
     board.receiveAttack([0, 1]);
     expect(board.hitAttacks).toContainEqual([0, 1]);
   });
 
   it("does not record a hit when the attack misses", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
+    board.placeShip(smallShip, [0, 0], "right");
     board.receiveAttack([0, 2]);
     expect(board.hitAttacks).not.toContainEqual([0, 2]);
   });
 
   it("increases the ship's hit count when it hits", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
+    board.placeShip(smallShip, [0, 0], "right");
     board.receiveAttack([0, 1]);
     expect(smallShip.hits).toBe(1);
   });
@@ -148,7 +115,7 @@ describe("receiveAttack", () => {
     });
 
     it("throws when the square was already attacked and hit", () => {
-      board.placeShip(smallShip, [0, 0], [0, 1]);
+      board.placeShip(smallShip, [0, 0], "right");
       board.receiveAttack([0, 1]);
       expect(() => board.receiveAttack([0, 1])).toThrow("");
     });
@@ -177,20 +144,20 @@ describe("isAllSunk", () => {
   });
 
   it("should be false when not all ships are sunk", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
+    board.placeShip(smallShip, [0, 0], "right");
     expect(board.isAllSunk()).toBe(false);
   });
 
   it("should be false when only one of two ships are sunk", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
-    board.placeShip(mediumShip, [4, 4], [6, 4]);
+    board.placeShip(smallShip, [0, 0], "right");
+    board.placeShip(mediumShip, [4, 4], "down");
     board.receiveAttack([0, 0]);
     board.receiveAttack([0, 1]);
     expect(board.isAllSunk()).toBe(false);
   });
 
   it("should be true when all ships are sunk", () => {
-    board.placeShip(smallShip, [0, 0], [0, 1]);
+    board.placeShip(smallShip, [0, 0], "right");
     board.receiveAttack([0, 0]);
     board.receiveAttack([0, 1]);
     expect(board.isAllSunk()).toBe(true);
