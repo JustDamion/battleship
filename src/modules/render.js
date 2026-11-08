@@ -6,24 +6,16 @@ function renderBoard(gameboard, container, hideShips = false) {
       square.setAttribute("data-row", rowIndex);
       square.setAttribute("data-column", columnIndex);
 
-      if (
-        gameboard.missedAttacks.some(
-          ([missRow, missCol]) => missRow === rowIndex && missCol === columnIndex,
-        )
-      ) {
+      if (gameboard.missedAttacks.has(`${rowIndex},${columnIndex}`)) {
         square.classList.add("board__square--miss");
       }
 
-      if (
-        gameboard.hitAttacks.some(
-          ([missRow, missCol]) => missRow === rowIndex && missCol === columnIndex,
-        )
-      ) {
+      if (gameboard.hitAttacks.has(`${rowIndex},${columnIndex}`)) {
         square.classList.add("board__square--hit");
       }
 
-      if (!hideShips) {
-        square.textContent = cell;
+      if (!hideShips && gameboard.ships.has(`${rowIndex},${columnIndex}`)) {
+        square.classList.add("ship");
       }
 
       container.appendChild(square);
@@ -40,7 +32,12 @@ function renderPlayerOneBoard(gameboard) {
 function renderPlayerTwoBoard(gameboard) {
   const container = document.getElementById("player-two-board");
   container.textContent = "";
-  renderBoard(gameboard, container, true);
+  renderBoard(gameboard, container);
 }
 
-export { renderPlayerOneBoard, renderPlayerTwoBoard };
+function renderPlacement(gameboard) {
+  const board = document.getElementById("placement-board");
+  renderBoard(gameboard, board, false);
+}
+
+export { renderPlayerOneBoard, renderPlayerTwoBoard, renderPlacement };
