@@ -19,6 +19,13 @@ describe("hit and sink", () => {
     expect(ship.hits).toBe(2);
   });
 
+  it("should not increase number of hits if ship is sunk", () => {
+    ship.hits = 3;
+    expect(ship.isSunk()).toBe(true);
+    ship.hit();
+    expect(ship.hits).toBe(3);
+  });
+
   it("should check that the ship is not sunk", () => {
     expect(ship.isSunk()).toBe(false);
   });

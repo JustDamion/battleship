@@ -2,15 +2,22 @@ const BOARD_SIZE = 10;
 
 export default class GameBoard {
   board = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(null));
+  ships = new Set();
   missedAttacks = new Set();
   hitAttacks = new Set();
+
+  key([row, col]) {
+    return `${row},${col}`;
+  }
 
   isInBounds([row, col]) {
     return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
   }
 
   isSquareAlreadyAttacked([row, col]) {
-    return this.missedAttacks.has(`${row},${col}`) || this.hitAttacks.has(`${row},${col}`);
+    return (
+      this.missedAttacks.has(this.key([row, col])) || this.hitAttacks.has(this.key([row, col]))
+    );
   }
 
   isShip([row, col]) {
@@ -19,7 +26,7 @@ export default class GameBoard {
   }
 
   placeShip(ship, [row, col], direction) {
-    const directions = {
+    const DIRECTIONS = {
       up: [-1, 0],
       down: [1, 0],
       left: [0, -1],
@@ -27,18 +34,21 @@ export default class GameBoard {
     };
 
     for (let i = 0; i < ship.length; i++) {
-      const placeRow = row + i * directions[direction][0];
-      const placeCol = col + i * directions[direction][1];
+      const placeRow = row + i * DIRECTIONS[direction][0];
+      const placeCol = col + i * DIRECTIONS[direction][1];
 
-      if (this.isShip([placeRow, placeCol])) throw new Error();
+      if (!this.isInBounds([placeRow, placeCol]) || this.isShip([placeRow, placeCol])) return false;
     }
 
     for (let i = 0; i < ship.length; i++) {
-      const placeRow = row + i * directions[direction][0];
-      const placeCol = col + i * directions[direction][1];
+      const placeRow = row + i * DIRECTIONS[direction][0];
+      const placeCol = col + i * DIRECTIONS[direction][1];
 
       this.board[placeRow][placeCol] = ship;
+      this.ships.add(this.key([placeRow, placeCol]));
     }
+
+    return true;
   }
 
   receiveAttack([row, col]) {
@@ -48,9 +58,9 @@ export default class GameBoard {
 
     if (this.isShip([row, col])) {
       this.board[row][col].hit();
-      this.hitAttacks.add(`${row},${col}`);
+      this.hitAttacks.add(this.key([row, col]));
     } else {
-      this.missedAttacks.add(`${row},${col}`);
+      this.missedAttacks.add(this.key([row, col]));
     }
   }
 

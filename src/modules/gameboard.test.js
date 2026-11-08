@@ -52,29 +52,29 @@ describe("placeShip", () => {
   });
 
   describe("invalid placements", () => {
-    it("throws when the ship overlaps another ship", () => {
+    it("returns false when the ship overlaps another ship", () => {
       board.placeShip(mediumShip, [0, 2], "down");
-      expect(() => board.placeShip(mediumShip, [1, 1], "right")).toThrow("");
+      expect(board.placeShip(mediumShip, [1, 1], "right")).toBe(false);
       expect(board.isShip([1, 1])).toBe(false);
     });
 
-    it("throws when the start row is larger than max board size", () => {
-      expect(() => board.placeShip(mediumShip, [10, 0], "right")).toThrow("");
+    it("returns false when the start row is larger than max board size", () => {
+      expect(board.placeShip(mediumShip, [10, 0], "right")).toBe(false);
       expect(board.isShip([9, 0])).toBe(false);
     });
 
-    it("throws when the start row is negative", () => {
-      expect(() => board.placeShip(mediumShip, [-1, 0], "left")).toThrow("");
+    it("returns false when the start row is negative", () => {
+      expect(board.placeShip(mediumShip, [-1, 0], "left")).toBe(false);
       expect(board.isShip([1, 0])).toBe(false);
     });
 
-    it("throws when the start col is larger than max board size", () => {
-      expect(() => board.placeShip(mediumShip, [0, 10], "up")).toThrow("");
+    it("returns false when the start col is larger than max board size", () => {
+      expect(board.placeShip(mediumShip, [0, 10], "up")).toBe(false);
       expect(board.isShip([0, 9])).toBe(false);
     });
 
-    it("throws when the start col is negative", () => {
-      expect(() => board.placeShip(mediumShip, [0, -1], "down")).toThrow("");
+    it("returns false when the start col is negative", () => {
+      expect(board.placeShip(mediumShip, [0, -1], "down")).toBe(false);
       expect(board.isShip([0, 1])).toBe(false);
     });
   });

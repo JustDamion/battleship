@@ -12,8 +12,8 @@ describe("Game", () => {
     expect(game.activePlayer).toBe(game.playerOne);
   });
 
-  it("starts with player two as inactive", () => {
-    expect(game.inactivePlayer).toBe(game.playerTwo);
+  it("starts with player two as opponent", () => {
+    expect(game.opponent).toBe(game.playerTwo);
   });
 
   describe("switchPlayer", () => {
@@ -22,9 +22,9 @@ describe("Game", () => {
       expect(game.activePlayer).toBe(game.playerTwo);
     });
 
-    it("switches inactive player to player one", () => {
+    it("switches opponent player to player one", () => {
       game.switchPlayer();
-      expect(game.inactivePlayer).toBe(game.playerOne);
+      expect(game.opponent).toBe(game.playerOne);
     });
   });
 });
