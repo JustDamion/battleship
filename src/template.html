@@ -7,22 +7,24 @@
   </head>
 
   <body>
-    <!-- <section class="placement"> -->
-    <!--   <div class="placement__ships"></div> -->
-    <!--   <div class="placement__board board" id="placement-board"></div> -->
-    <!-- </section> -->
+    <section>
+      <div class="placement">
+        <div class="placement__board board" id="placement-board"></div>
+      </div>
+
+      <button class="place-button" id="place-button">Place</button>
+      <button class="play-button" id="play-button">Play</button>
+    </section>
 
     <section id="game" class="game">
       <div class="player">
-        <div class="player-one">
-          <h1 class="player-one__title">Player 1</h1>
+        <div class="player-one" id="player-one">
           <div class="player-one__board board" id="player-one-board"></div>
         </div>
       </div>
 
       <div class="player">
-        <div class="player-two">
-          <h1 class="player-two__title">Player 2</h1>
+        <div class="player-two" id="player-two">
           <div class="player-two__board board" id="player-two-board"></div>
         </div>
       </div>

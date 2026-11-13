@@ -74,8 +74,16 @@ body {
 
 .placement {
   display: flex;
+  height: 52vh;
+  gap: 16px;
   justify-content: center;
   align-items: center;
+}
+
+.placement__ships {
+  border: 1px solid black;
+  width: 240px;
+  height: 100%;
 }
 
 .board {

@@ -1,4 +1,4 @@
-import { renderPlayerOneBoard, renderPlayerTwoBoard } from "./modules/render.js";
+import { renderPlacement, renderPlayerOneBoard, renderPlayerTwoBoard } from "./modules/render.js";
 import Player from "./modules/player.js";
 import Ship from "./modules/ship.js";
 
@@ -71,13 +71,29 @@ export default class Game {
       this.placeShipRandomly(this.playerTwo, new Ship(length));
     }
 
-    this.playerOne.gameboard.placeShip(new Ship(3), [5, 5], "right");
-    // renderPlacement(this.playerOne.gameboard);
-    renderPlayerOneBoard(this.playerOne.gameboard);
-    renderPlayerTwoBoard(this.playerTwo.gameboard);
+    renderPlacement(this.playerOne.gameboard);
 
     const playerOneBoardElement = document.getElementById("player-one-board");
     const playerTwoBoardElement = document.getElementById("player-two-board");
+    const placeButton = document.getElementById("place-button");
+
+    let shipCount = 0;
+
+    placeButton.addEventListener("click", () => {
+      if (shipCount < SHIPS.length) {
+        this.placeShipRandomly(this.playerOne, new Ship(SHIPS[shipCount]));
+        renderPlacement(this.playerOne.gameboard);
+      }
+
+      shipCount++;
+    });
+
+    const playButton = document.getElementById("play-button");
+
+    playButton.addEventListener("click", () => {
+      renderPlayerOneBoard(this.playerOne.gameboard);
+      renderPlayerTwoBoard(this.playerTwo.gameboard);
+    });
 
     playerOneBoardElement.addEventListener("click", (event) => {
       if (this.activePlayer !== this.playerTwo) return;

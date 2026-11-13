@@ -25,18 +25,35 @@ function renderBoard(gameboard, container, hideShips = false) {
 
 function renderPlayerOneBoard(gameboard) {
   const container = document.getElementById("player-one-board");
+  const playerOne = document.getElementById("player-one");
+  const playerOneTitle =
+    document.getElementById("player-one-title") || document.createElement("h1");
+  playerOneTitle.textContent = "Player 1";
+  playerOneTitle.setAttribute("class", "player-one__title");
+  playerOneTitle.setAttribute("id", "player-one-title");
+  playerOne.appendChild(playerOneTitle);
+
   container.textContent = "";
   renderBoard(gameboard, container);
 }
 
 function renderPlayerTwoBoard(gameboard) {
   const container = document.getElementById("player-two-board");
+  const playerTwo = document.getElementById("player-two");
+  const playerTwoTitle =
+    document.getElementById("player-two-title") || document.createElement("h1");
+  playerTwoTitle.textContent = "Player 2";
+  playerTwoTitle.setAttribute("class", "player-two__title");
+  playerTwoTitle.setAttribute("id", "player-two-title");
+  playerTwo.appendChild(playerTwoTitle);
+
   container.textContent = "";
-  renderBoard(gameboard, container);
+  renderBoard(gameboard, container, true);
 }
 
 function renderPlacement(gameboard) {
   const board = document.getElementById("placement-board");
+  board.textContent = "";
   renderBoard(gameboard, board, false);
 }
 
